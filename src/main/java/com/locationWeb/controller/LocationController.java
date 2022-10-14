@@ -3,20 +3,25 @@ package com.locationWeb.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.locationWeb.entities.Location;
+import com.locationWeb.repository.LocationRepository;
 import com.locationWeb.service.LocationService;
+import com.locationWeb.util.EmailUtil;
 
-@Controller
+@RestController
 public class LocationController {
 	@Autowired
 	LocationService service;
-
+	@Autowired
+	EmailUtil emailUtil;
+	@Autowired
+	LocationRepository repository;
 	@RequestMapping("/showCreate")
 	public String showCreate() {
 		return "createLocation";
@@ -27,15 +32,18 @@ public class LocationController {
 		Location savedLocation = service.saveLocation(location);
 		String msg = "Location saved with id: " + savedLocation.getId();
 		modelMap.addAttribute("msg", msg);
+		emailUtil.sendEmail("ngocanhoskj@gmail.com", "hello", msg);
 		return "createLocation";
-		
+
 	}
+
 	@RequestMapping("/displayLocations")
 	public String displayLocations(ModelMap modelMap) {
 		List<Location> allLocation = service.getAllLocation();
 		modelMap.addAttribute("locations", allLocation);
-		return"displayLocations";
+		return "displayLocations";
 	}
+
 	@RequestMapping("/deleteLocation")
 	public String deleteLocation(@RequestParam int id, ModelMap modelMap) {
 //		Location locationById = service.getLocationById(id);
@@ -44,20 +52,29 @@ public class LocationController {
 		service.deleteLocation(locationById);
 		List<Location> allLocation = service.getAllLocation();
 		modelMap.addAttribute("locations", allLocation);
-		return"displayLocations";
+		return "displayLocations";
 	}
+
 	@RequestMapping("/showUpdate")
 	public String showUpdate(@RequestParam int id, ModelMap modelMap) {
 		Location locationById = service.getLocationById(id);
 		modelMap.addAttribute("location", locationById);
 		return "editLocation";
 	}
+
 	@RequestMapping("/updateLoc")
 	public String updateLocation(@ModelAttribute Location location, ModelMap modelMap) {
 		service.updateLocation(location);
 		List<Location> allLocation = service.getAllLocation();
 		modelMap.addAttribute("locations", allLocation);
 		return "displayLocations";
+	}
+	@RequestMapping("/generateReport")
+	public List<Location> generateReport() {
+		List<Location> findTypeAndTypeCount = repository.findAll();
+//		reportUtil.generatePieChart(findTypeAndTypeCount);
+		return findTypeAndTypeCount;
+		
 	}
 
 }
