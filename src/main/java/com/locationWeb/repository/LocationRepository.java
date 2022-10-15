@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.locationWeb.entities.Location;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Integer> {
+//	@Query(value = "select * from projectjpa.location_table", nativeQuery = true)
+//	public List<Location> findA();
 }

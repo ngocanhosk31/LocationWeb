@@ -3,18 +3,18 @@ package com.locationWeb.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.locationWeb.entities.Location;
 import com.locationWeb.repository.LocationRepository;
 import com.locationWeb.service.LocationService;
 import com.locationWeb.util.EmailUtil;
 
-@RestController
+@Controller
 public class LocationController {
 	@Autowired
 	LocationService service;
@@ -69,12 +69,12 @@ public class LocationController {
 		modelMap.addAttribute("locations", allLocation);
 		return "displayLocations";
 	}
-	@RequestMapping("/generateReport")
-	public List<Location> generateReport() {
-		List<Location> findTypeAndTypeCount = repository.findAll();
-//		reportUtil.generatePieChart(findTypeAndTypeCount);
-		return findTypeAndTypeCount;
-		
-	}
+//	@RequestMapping("/generateReport")
+//	public List<Location> generateReport() {
+//		List<Location> locations = repository.findA();
+//		List<Location> locations = service.getAllLocation();
+//		return locations;
+//		
+//	}
 
 }
